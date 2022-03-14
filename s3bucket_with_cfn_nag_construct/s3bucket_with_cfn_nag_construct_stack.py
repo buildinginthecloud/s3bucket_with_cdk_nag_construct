@@ -1,19 +1,16 @@
 from aws_cdk import (
-    # Duration,
+    Aspects,
     Stack,
-    # aws_sqs as sqs,
+    aws_s3 as s3,
 )
 from constructs import Construct
+from secure_bucket_construct import SecureBucket
+import cdk_nag
 
 class S3BucketWithCfnNagConstructStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # The code that defines your stack goes here
-
-        # example resource
-        # queue = sqs.Queue(
-        #     self, "S3BucketWithCfnNagConstructQueue",
-        #     visibility_timeout=Duration.seconds(300),
-        # )
+        SecureBucket(self, 'SecureS3Bucket')
+        Aspects.of(self).add(cdk_nag.AwsSolutionsChecks())
